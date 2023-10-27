@@ -1,0 +1,121 @@
+python manage.py shell
+
+from News.models import *
+
+User1 = User.objects.create_user(username = 'Никита')
+
+User2 = User.objects.create_user(username = 'Маша')
+
+Author.objects.create(authorUser = User1)
+
+Author.objects.create(authorUser = User2)
+
+Category.objects.create(CategoryNewsState = 'Алгоритм Дейкстра')
+
+Category.objects.create(CategoryNewsState = 'Статический анализ')
+
+Category.objects.create(CategoryNewsState = 'Нахождение кратчайшего расстояния')
+
+Category.objects.create(CategoryNewsState = 'Математичский анализ')
+
+author =Author.objects.get(id=1)
+
+author2 =Author.objects.get(id=2)
+
+Post.objects.create(Author = author, categoryType = 'NW', title = 'Дискретная математика', text = 'Это сложный предмет')
+
+Post.objects.create(Author = author, categoryType = 'AR', title = 'Математический анализ', text = 'Это очень сложный предмет')
+
+Post.objects.create(Author = author2, categoryType = 'AR', title = 'Основы программирования', text = 'Это самый понятный предмет')
+
+Post.objects.get(id=1).post.add(Category.objects.get(id=1))
+
+Post.objects.get(id=1).post.add(Category.objects.get(id=3))
+
+Post.objects.get(id=2).post.add(Category.objects.get(id=4))
+
+Post.objects.get(id=2).post.add(Category.objects.get(id=2))
+
+Post.objects.get(id=3).post.add(Category.objects.get(id=1))
+
+Post.objects.get(id=3).post.add(Category.objects.get(id=3))
+
+Post.objects.get(id=3).post.add(Category.objects.get(id=4))
+
+Comment.objects.create(CommentPost = Post.objects.get(id=1), CommentUser = Author.objects.get(id=1).authorUser, textCom = 'А мне понравилась дискретка!')
+
+Comment.objects.create(CommentPost = Post.objects.get(id=2), CommentUser = Author.objects.get(id=1).authorUser, textCom = 'Я считаю, что Мат. анал. самый сложный предмет')
+
+Comment.objects.create(CommentPost = Post.objects.get(id=3), CommentUser = Author.objects.get(id=1).authorUser, textCom = 'Самый классный предмет в унике, лайк')
+
+Comment.objects.create(CommentPost = Post.objects.get(id=3), CommentUser = Author.objects.get(id=2).authorUser, textCom = 'А меня завалил препод на экзаммене')
+
+Post.objects.get(id=1).like()
+
+Post.objects.get(id=1).like()
+
+Post.objects.get(id=3).like()
+
+Post.objects.get(id=2).dislike()
+
+Post.objects.get(id=2).dislike()
+
+Post.objects.get(id=2).dislike()
+
+Comment.objects.get(id=1).like()
+
+Comment.objects.get(id=2).like()
+
+Post.objects.get(id=2).ratingPost
+
+Comment.objects.get(id=3).ratingCom
+
+Author1 = Author.objects.get(id=1)
+
+Author2 = Author.objects.get(id=2)
+
+Author1.update_rating()
+
+Author2.update_rating()
+
+Author1.ratingAuthor
+
+Author2.ratingAuthor
+
+BestUser = Author.objects.order_by('-ratingAuthor')[:1]
+
+BestUser
+
+for i in BestUser:
+    i.ratingAuthor
+    i.authorUser.username
+
+BestPost= Post.objects.order_by('-ratingPost').first()
+
+BestPost.Author.authorUser.username
+
+BestPost.ratingPost
+
+BestPost.title
+
+BestPost.preview()
+
+date = BestPost.dataCreation
+
+formatted_date = date.strftime("%d-%m-%Y")
+
+formatted_date
+
+BestComment = Comment.objects.get(CommentPost = BestPost)
+
+date = BestComment.time_in
+
+formatted_date = date.strftime("%d-%m-%Y")
+
+formatted_date
+
+BestComment.CommentUser.username
+
+BestComment.ratingCom
+
+BestComment.textCom
